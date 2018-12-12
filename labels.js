@@ -83,7 +83,7 @@ var render = function(addresses) {
 	var size = getFontSizeToFit(doc, addr, "AmaticSC-Bold.ttf",
 				    addrFontSize, LABEL_WIDTH - 10)
 	if (size < addrFontSize) {
-	    console.log(addr + ' at ' + size);
+	    //console.log(addr + ' at ' + size);
 	}
 	doc.fontSize(size);
 	var lines = addr.split('\n');
@@ -104,10 +104,16 @@ fs.readFile(infile, 'utf8', function (err, data) {
     csv.parse(data, function(err, rows) {
 	var addresses = [];
 	for (i in rows) {
+	    if (rows[i][1].indexOf('y') > -1) {
+		console.log("Skipping:");
+		console.log(rows[i]);
+		continue;
+	    }
 	    if (rows[i][2].indexOf('\n') > -1) {
 		addresses.push(rows[i][2]);
 	    } else if (i != 0) {
-		console.log('Skipping address on row ' + i + ': ' + rows[i][2]);
+		console.log('Skipping one-line address on row ' + i +
+			    ': ' + rows[i][2]);
 	    }
 	}
 	render(addresses);
